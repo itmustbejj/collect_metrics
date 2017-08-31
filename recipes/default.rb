@@ -4,16 +4,16 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-cookbook_file '/home/centos/instance_data.sh' do
+cookbook_file '/home/ec2-user/instance_data.sh' do
   source 'instance_data.sh'
-  user   'centos'
-  group  'centos'
+  user   'ec2-user'
+  group  'ec2-user'
   mode   '0755'
   notifies :run, 'execute[populate-instance-info]', :immediately 
 end
 
 execute 'populate-instance-info' do
-  command '/home/centos/instance_data.sh'
+  command '/home/ec2-user/instance_data.sh'
   action :nothing
 end
 

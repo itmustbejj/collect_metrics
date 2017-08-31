@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /home/centos/instance_info
+source /home/ec2-user/instance_info
 
 # This script is intended to run every 5 minutes from cron.
 # It will produce average request time and average upstream response time over 5-minute intervals. 

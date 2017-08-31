@@ -8,7 +8,7 @@ import difflib
 index = sys.argv[1]
 time  = sys.argv[2]
 value = sys.argv[3]
-history_file = "/home/centos/index_records.json"
+history_file = "/home/ec2-user/index_records.json"
 
 if os.path.isfile(history_file):
   file = open(history_file,'r+')

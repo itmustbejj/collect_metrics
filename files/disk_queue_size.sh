@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /home/centos/instance_info
+source /home/ec2-user/instance_info
 
 command=`iostat -x 1 -d /dev/xvda count 3 | awk 'NR==7 {print $9}'`
 

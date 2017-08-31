@@ -1,10 +1,10 @@
 #!/bin/bash
 
-source /home/centos/instance_info
+source /home/ec2-user/instance_info
 
 hostname=`hostname`
 
-command=`curl -s -XGET "http://$hostname:9200/_nodes/_local/stats/jvm" | /home/centos/jq-linux64 '(.. | .jvm?.mem.heap_used_in_bytes | numbers ) , (.. | .jvm?.mem.heap_used_percent | numbers ) , (.. | .jvm?.gc.collectors.old.collection_count | numbers ) , (.. | .jvm?.gc.collectors.old.collection_time_in_millis | numbers ) , (.. | .jvm?.gc.collectors.young.collection_count | numbers ) , (.. | .jvm?.gc.collectors.young.collection_time_in_millis | numbers )'`
+command=`curl -s -XGET "http://$hostname:9200/_nodes/_local/stats/jvm" | /home/ec2-user/jq-linux64 '(.. | .jvm?.mem.heap_used_in_bytes | numbers ) , (.. | .jvm?.mem.heap_used_percent | numbers ) , (.. | .jvm?.gc.collectors.old.collection_count | numbers ) , (.. | .jvm?.gc.collectors.old.collection_time_in_millis | numbers ) , (.. | .jvm?.gc.collectors.young.collection_count | numbers ) , (.. | .jvm?.gc.collectors.young.collection_time_in_millis | numbers )'`
 
 mapfile -t es_metrics <<<"$command"
 

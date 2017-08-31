@@ -1,5 +1,5 @@
 #!/bin/bash
-source /home/centos/instance_info
+source /home/ec2-user/instance_info
 
 hostname=`hostname`
 
@@ -22,11 +22,11 @@ node_records=0
 compliance_records=0
 
 for index in $( echo $node_indices | awk '{split($0,a,/\s/)} END { for (key in a) { print a[key] } }' ); do
-  node_records=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_count | /home/centos/jq-linux64 '.count'`+$node_records; exit}")
+  node_records=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_count | /home/ec2-user/jq-linux64 '.count'`+$node_records; exit}")
 done
 
 for index in $(echo $compliance_indices | awk '{split($0,a,/\s/)} END { for (key in a) { print a[key] } }'); do
-  compliance_records=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_count | /home/centos/jq-linux64 '.count'`+$compliance_records; exit}")
+  compliance_records=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_count | /home/ec2-user/jq-linux64 '.count'`+$compliance_records; exit}")
 done
 
 total_records=$(awk "BEGIN {print $node_records+$compliance_records; exit}")
@@ -35,11 +35,11 @@ node_index_bytes=0
 compliance_index_bytes=0
 
 for index in $( echo $node_indices | awk '{split($0,a,/\s/)} END { for (key in a) { print a[key] } }' ); do
-  node_index_bytes=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_stats/store?pretty | /home/centos/jq-linux64 '._all.total.store.size_in_bytes'`+$node_index_bytes; exit}")
+  node_index_bytes=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_stats/store?pretty | /home/ec2-user/jq-linux64 '._all.total.store.size_in_bytes'`+$node_index_bytes; exit}")
 done
 
 for index in $(echo $compliance_indices | awk '{split($0,a,/\s/)} END { for (key in a) { print a[key] } }'); do
-  compliance_index_bytes=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_stats/store?pretty | /home/centos/jq-linux64 '._all.total.store.size_in_bytes'`+$compliance_index_bytes; exit}")
+  compliance_index_bytes=$(awk "BEGIN {print `curl -s -XGET http://$hostname:9200/$index/_stats/store?pretty | /home/ec2-user/jq-linux64 '._all.total.store.size_in_bytes'`+$compliance_index_bytes; exit}")
 done
 
 total_bytes=$(awk "BEGIN {print $node_index_bytes+$compliance_index_bytes; exit}")
@@ -47,8 +47,8 @@ total_bytes=$(awk "BEGIN {print $node_index_bytes+$compliance_index_bytes; exit}
 curtime=`date +%s`
 node_index="insights"
 compliance_index="compliance"
-node_records_per_minute=`/home/centos/index_records.py $node_index $curtime $node_records`
-compliance_records_per_minute=`/home/centos/index_records.py $compliance_index $curtime $compliance_records`
+node_records_per_minute=`/home/ec2-user/index_records.py $node_index $curtime $node_records`
+compliance_records_per_minute=`/home/ec2-user/index_records.py $compliance_index $curtime $compliance_records`
 total_records_per_minute=$(awk "BEGIN {print $node_records_per_minute+$compliance_records_per_minute; exit}")
 
 node_records_per_minute_int=`echo $node_records_per_minute | awk '{split($0,a,/\./)} END {print a[1]}'`
